@@ -98,17 +98,17 @@ def calc_b_val(Mv, dm, Mmin, Mmax, KS_thresh = 0.05):
 
         # -------- Searching for threshold or minimum K-S distance -------------
         pos = np.argmin(Dok)
-        checkD = 0
-        for ii in range(pos):
-            if checkD == 0:
-                if Dok[ii]<=KS_thresh:
-                    pos = ii
-                    checkD = 1
-                    Dmin = Dok[ii]
-        if checkD ==0:
-            Dmin = np.min(Dok[Dok >0])
-            pos  = np.argmin(Dok[Dok >0])
+        minDok = np.min(Dok)
+        if minDok > KS_thresh:
+            Dmin = np.min(Dok[Dok > 0])
+            pos  = np.argmin(Dok[Dok > 0])
             print('D obtained above 0.05 (%1.4f)' % Dmin)
+        else:
+            for ii in range(pos):
+                if Dok[ii] <= KS_thresh:
+                    break
+            pos = ii
+            Dmin = Dok[ii]
 
         b_data.Dks   = D
         b_data.b     = b
